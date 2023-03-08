@@ -1,0 +1,9 @@
+# включение логирования ошибок
+php_flag log_errors on
+
+# роутинг всех запросов с /payments/* на index.php
+RewriteEngine On
+RewriteBase /payment/
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php?$1 [L,QSA]
