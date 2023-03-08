@@ -1,6 +1,5 @@
 <?php
 
-
 class Response
 {
     private $status;
@@ -11,9 +10,10 @@ class Response
     {
         $this->status = $status;
         $this->body = $body;
+
     }
 
-    public function withHeader($name, $value)
+    public function withHeader($name = 'Content-Type', $value = 'application/json')
     {
         $this->headers[$name] = $value;
         return $this;

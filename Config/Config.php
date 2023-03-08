@@ -14,13 +14,4 @@ class Config
         return $this->data;
     }
 
-    public function getYoomoneyConfig()
-    {
-        return $this->data['yoomoney'];
-    }
-
-    public function getDatabaseConfig()
-    {
-        return $this->data['database'];
-    }
 }
