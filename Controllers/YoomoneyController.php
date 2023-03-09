@@ -10,14 +10,12 @@ class YoomoneyController
     }
 
     // Отображение формы для оплаты заказа
-    public function redirectToPaymentForm()
+    public function redirectToPaymentForm(Request $request)
     {
-        $amount = $_GET['amount'] ?? null;
-        $comment = $_GET['comment'] ?? null;
-
+        $amount = $request->getGet()['amount'];
+        $comment = $request->getGet()['comment'];
         $_wallet = $this->config['yoomoney']['yoomoney_wallet'];
         $_token = $this->config['yoomoney']['yoomoney_token'];
-        $comment = 'Оплата заказа 123'; // описание заказа
 
         // Формирование URL для отправки запроса на создание ссылки на оплату
         $api = new YoomoneyApi($_token, $_wallet);

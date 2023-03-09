@@ -3,6 +3,7 @@
 // Подключение файлов
 require_once 'Config/Config.php';
 require_once 'Lib/YoomoneyApi.php';
+require_once 'Lib/Http/Request.php';
 require_once 'Lib/Http/Response.php';
 require_once 'Models/PaymentModel.php';
 require_once 'Controllers/PaymentController.php';
@@ -10,7 +11,8 @@ require_once 'Controllers/YoomoneyController.php';
 
 
 // Определение конфигураций
-$Config = new Config('config.ini');
+$config = new Config('config.ini');
+$request = new Request($_POST, $_GET, $_SERVER);
 
 // Определение маршрутов
 $routes = array(
@@ -20,17 +22,20 @@ $routes = array(
 
 // Обработка текущего запроса
 $request_uri = $_SERVER['REQUEST_URI'];
-$route = str_replace('/index.php', '', $request_uri);
-$route = str_replace('?', '', $route);
+$parsed_url = parse_url($request_uri);
+$route = $parsed_url['path'];
+parse_str($parsed_url['query'], $query_params);
 
-
+// Проверка существования маршрута
 if (array_key_exists($route, $routes)) {
-    $controller_action = $routes[$route];
-    list($controller_name, $action_name) = explode('@', $controller_action);
-    $controller = new $controller_name($Config);
-    $controller->$action_name();
+    // Разбор строки контроллера и метода
+    list($controller_name, $method_name) = explode('@', $routes[$route]);
 
+    // Создаем экземпляр контроллера с конфигурациями приложения
+    $controller = new $controller_name($config);
+
+    // Вызываем метод контроллера с текущим зарпосом в параметре
+    $controller->$method_name($request);
 } else {
-    $response = new Response(404);
-    $response->withHeader()->send();
+    (new Response(404))->withHeader()->send();
 }
