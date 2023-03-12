@@ -17,6 +17,7 @@ $request = new Request($_POST, $_GET, $_SERVER);
 // Определение маршрутов
 $routes = array(
     '/payment/yoomoney' => 'YoomoneyController@redirectToPaymentForm',
+    '/payment/yoomoney/history' => 'YoomoneyController@getHistory',
     '/payment/health' => 'PaymentController@health',
 );
 
