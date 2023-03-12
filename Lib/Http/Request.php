@@ -5,12 +5,14 @@ class Request
     private $post;
     private $get;
     private $server;
+    private $headers;
 
     public function __construct($post, $get, $server)
     {
         $this->post = $post;
         $this->get = $get;
         $this->server = $server;
+        $this->headers = $this->getHeaders();
     }
 
     public function getPost()
@@ -42,6 +44,41 @@ class Request
             }
         }
         return true;
+    }
+
+    public function getHeader($name)
+    {
+        $name = str_replace('-', '_', strtoupper($name));
+        $key = 'HTTP_' . $name;
+        return isset($this->headers[$key]) ? $this->headers[$key] : null;
+    }
+
+    private function getHeaders()
+    {
+        $headers = [];
+        foreach ($this->server as $name => $value) {
+            if (strpos($name, 'HTTP_') === 0) {
+                $headers[$name] = $value;
+            }
+        }
+
+        return $headers;
+    }
+
+    /**
+     * Проверяет наличие и корректность заголовка X-Api-Secret в текущем запросе
+     */
+    public function checkApiSecret()
+    {
+        $config = (new Config('config.ini'))->get();
+        $headerValue = $this->getHeader('x-api-key');
+
+        if (empty($headerValue) || $headerValue !== $config['api']['x-api-key']) {
+            $message = ($headerValue === null) ? 'Missing x-api-key header' : 'Invalid x-api-key header';
+            $body = json_encode(['status' => 'error', 'message' => $message]);
+            (new Response(401))->withHeader()->withBody($body)->send();
+            exit();
+        }
     }
 
 }

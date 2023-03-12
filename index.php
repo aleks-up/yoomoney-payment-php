@@ -14,6 +14,9 @@ require_once 'Objects/Payment.php';
 // Определение конфигураций
 $request = new Request($_POST, $_GET, $_SERVER);
 
+// Валидация заголовка x-api-key
+$request->checkApiSecret();
+
 // Определение маршрутов
 $routes = array(
     '/payment/yoomoney' => 'YoomoneyController@redirectToPaymentForm',
