@@ -4,13 +4,11 @@ class Config
 {
     private $data;
 
-    public function __construct($configFilePath)
-    {
+    public function __construct($configFilePath) {
         $this->data = parse_ini_file($configFilePath, true);
     }
 
-    public function get()
-    {
+    public function get() {
         return $this->data;
     }
 

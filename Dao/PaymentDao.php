@@ -50,7 +50,7 @@ class PaymentDao extends Database
      * @return array Возвращает массив с данными найденного платежа, или пустой массив, если платеж не найден
      * @throws Exception Если произошла ошибка при выполнении запроса к базе данных
      */
-    public function findNewPaymentByCardNumber($card_last_digits)
+    public function findNewPaymentByCardNumber($card_last_digits): int|null
     {
         $db = new Database();
         $new_payment_by_card = $db->select(

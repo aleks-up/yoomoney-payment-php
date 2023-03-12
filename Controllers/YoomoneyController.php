@@ -16,12 +16,9 @@ class YoomoneyController
     }
 
     /**
-
-    Метод для перенаправления на страницу оплаты заказа.
-
-    @param Request $request Объект, содержащий данные запроса.
-
-    @return void
+     * Метод для перенаправления на страницу оплаты заказа.
+     *
+     * @param Request $request
      */
     public function redirectToPaymentForm(Request $request)
     {
@@ -34,13 +31,11 @@ class YoomoneyController
         header("Location: {$payment_url}");
     }
 
-    // Обработка уведомлений об оплате
 
     /**
      * Получает историю платежей Юмани
      *
      * @param Request $request
-     * @return void
      */
     public function getHistory(Request $request)
     {
@@ -58,10 +53,6 @@ class YoomoneyController
 
     /**
      * Синхронизирует платежи с ЮMoney и сохраняет их в базу данных.
-     * Метод использует свойство $payment_system для определения системы оплаты, которую необходимо синхронизировать.
-     *
-     * @return void
-     * @throws Exception Если произошла ошибка при выполнении запроса к базе данных
      */
     public function _syncPayments(): void
     {
