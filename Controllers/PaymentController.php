@@ -2,13 +2,6 @@
 
 class PaymentController
 {
-    private $config;
-
-    public function __construct(Config $Config)
-    {
-        $this->config = $Config->get();
-    }
-
 
     public function health(): void
     {

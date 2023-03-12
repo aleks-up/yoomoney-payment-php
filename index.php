@@ -5,19 +5,20 @@ require_once 'Config/Config.php';
 require_once 'Lib/YoomoneyApi.php';
 require_once 'Lib/Http/Request.php';
 require_once 'Lib/Http/Response.php';
-require_once 'Models/PaymentModel.php';
+require_once 'Dao/Database.php';
+require_once 'Dao/PaymentDao.php';
 require_once 'Controllers/PaymentController.php';
 require_once 'Controllers/YoomoneyController.php';
-
+require_once 'Objects/Payment.php';
 
 // Определение конфигураций
-$config = new Config('config.ini');
 $request = new Request($_POST, $_GET, $_SERVER);
 
 // Определение маршрутов
 $routes = array(
     '/payment/yoomoney' => 'YoomoneyController@redirectToPaymentForm',
     '/payment/yoomoney/history' => 'YoomoneyController@getHistory',
+    '/payment/yoomoney/check' => 'YoomoneyController@checkPayment',
     '/payment/health' => 'PaymentController@health',
 );
 
@@ -33,7 +34,7 @@ if (array_key_exists($route, $routes)) {
     list($controller_name, $method_name) = explode('@', $routes[$route]);
 
     // Создаем экземпляр контроллера с конфигурациями приложения
-    $controller = new $controller_name($config);
+    $controller = new $controller_name();
 
     // Вызываем метод контроллера с текущим зарпосом в параметре
     $controller->$method_name($request);
