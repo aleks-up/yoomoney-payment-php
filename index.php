@@ -14,8 +14,6 @@ require_once 'Objects/Payment.php';
 // Определение конфигураций
 $request = new Request($_POST, $_GET, $_SERVER);
 
-// Валидация заголовка x-api-key
-$request->checkApiSecret();
 
 // Определение маршрутов
 $routes = array(
@@ -25,11 +23,18 @@ $routes = array(
     '/payment/health' => 'PaymentController@health',
 );
 
+
 // Обработка текущего запроса
 $request_uri = $_SERVER['REQUEST_URI'];
 $parsed_url = parse_url($request_uri);
 $route = $parsed_url['path'];
 parse_str($parsed_url['query'], $query_params);
+
+if (!in_array($route, ['/payment/health', '/payment/yoomoney'])) {
+    // Валидация заголовка x-api-key
+    $request->checkApiSecret();
+}
+
 
 // Проверка существования маршрута
 if (array_key_exists($route, $routes)) {
